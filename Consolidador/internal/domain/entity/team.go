@@ -3,7 +3,8 @@ package entity
 type Team struct{
     ID string
     Name string
-    Players []*Player
+    Players []Player
+    
 }
 
 func NewTeam (id, name string) *Team {
@@ -17,10 +18,10 @@ func (t *Team) AddPlayer(player *Player) {
     t.Players = append(t.Players, player)   
 }
 
-func (t *Team) RemovePlayer(player *Player){
+func (t *Team) RemovePlayer(player *Player) {
     for i, p := range t.Players{
         if p.ID == player.ID{
-            t.Players = append(t.Players[:i],t.Player[i+1:]...)
+            t.Players = append(t.Players[:i], t.Player[i+1:]...)
             return
         }
     }

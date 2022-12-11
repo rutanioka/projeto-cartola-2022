@@ -1,4 +1,4 @@
-module github.com/devfullcycle/imersao10-consolidacao
+module github.com/rutanioka/Projeto-Cartola-2022
 
 go 1.19
 

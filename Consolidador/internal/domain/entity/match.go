@@ -23,14 +23,15 @@ func (m *MatchResult) GetResult() string{
 }
 
 type Match struct {
-    ID string
-    TeamA *Team
-    TeamB *Team
+    ID      string
+    TeamA   *Team
+    TeamB   *Team
     TeamAID string
     TeamBID string
     Date time.Time
     Status string
     Result MatchResult
+    Actions []GameAction
 }
 
 func NewMatch(id string, teamA *Team, teamB *Team, date time.Time) *Match{
@@ -41,5 +42,6 @@ func NewMatch(id string, teamA *Team, teamB *Team, date time.Time) *Match{
         TeamAID: teamA.ID,
         TeamBID: teamB.ID,
         Date:date,
+        
     }
 }
