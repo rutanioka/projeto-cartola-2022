@@ -1,6 +1,9 @@
 package entity
 
-import "time"
+import (
+	"strconv"
+	"time"
+)
 
 type MatchResult struct{
     teamAScore int
@@ -25,7 +28,7 @@ type Match struct {
     TeamB *Team
     TeamAID string
     TeamBID string
-    Date time.time
+    Date time.Time
     Status string
     Result MatchResult
 }

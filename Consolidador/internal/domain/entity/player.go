@@ -1,12 +1,12 @@
 package entity
 
-type Player struct{
+type Player struct {
     ID string
     Name string
     Price float64
 }
 
-func Newplayer(id, name string, price float64) *Player {
+func NewPlayer(id string, name string, price float64) *Player {
     return &Player{
         ID: id,
         Name: name,
