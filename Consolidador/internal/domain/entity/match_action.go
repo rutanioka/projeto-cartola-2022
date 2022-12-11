@@ -14,7 +14,7 @@ type GameAction struct{
 
 func NewGameAction (playerID string, minute int, action string, score int) *GameAction {
 	return &GameAction{
-		ID: uuid.New(),.String(),
+		ID: uuid.New().String(),
 		PlayerID: playerID,
 		Minute: minute,
 		Action: action,
