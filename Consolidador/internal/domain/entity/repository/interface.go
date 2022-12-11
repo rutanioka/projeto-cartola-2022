@@ -2,8 +2,7 @@ package repository
 
 import (
 	"context"
-
-	"github.com/devfullcycle/imersao10-consolidacao/internal/domain/entity"
+	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/domain/entity"
 )
 
 type MyTeamRepositoryInterface interface {

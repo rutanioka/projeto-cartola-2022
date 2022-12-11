@@ -21,7 +21,7 @@ func (t *Team) AddPlayer(player *Player) {
 func (t *Team) RemovePlayer(player *Player) {
     for i, p := range t.Players{
         if p.ID == player.ID{
-            t.Players = append(t.Players[:i], t.Player[i+1:]...)
+            t.Players = append(t.Players[:i], t.Players[i+1:]...)
             return
         }
     }
