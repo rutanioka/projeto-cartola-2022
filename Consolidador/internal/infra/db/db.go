@@ -1,4 +1,4 @@
-packge db
+package db
 
 import(
     "context"

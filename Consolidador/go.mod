@@ -1,4 +1,4 @@
-module github.com/rutanioka/Projeto-Cartola-2022
+module github.com/rutanioka/Projeto-Cartola-2022/Consolidador
 
 go 1.19
 
