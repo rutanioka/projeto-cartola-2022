@@ -1,9 +1,10 @@
 package usecase
 
 import (
+	"context"
+
 	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/domain/entity"
 	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/domain/entity/repository"
-	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/infra/repository"
 	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/package/uow"
 )
 
@@ -25,10 +26,11 @@ func (a *AddPlayerUseCase) Execute (ctx context.Context, input AddPlayerInput) e
 		return err
 	}
 	a.Uow.CommitOrRollback()
+	return nil
 }
 
 func (a *AddPlayerUseCase) getPlayerRepository (ctx context.Context) repository.PlayerRepositoryInterface {
-	playerRepository, err := a.Uow.GetRepository(ctx context.Context , "PlayerRepository")
+	playerRepository, err := a.Uow.GetRepository(ctx , "PlayerRepository")
 	if err != nil {
 		panic(err)
 	}
