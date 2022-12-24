@@ -28,7 +28,7 @@ func (a *AddPlayerUseCase) Execute (ctx context.Context, input AddPlayerInput) e
 }
 
 func (a *AddPlayerUseCase) getPlayerRepository (ctx context.Context) repository.PlayerRepositoryInterface {
-	playerRepository, err := a.Uow.GetRepository(ctx context.Context, "PlayerRepository")
+	playerRepository, err := a.Uow.GetRepository(ctx context.Context , "PlayerRepository")
 	if err != nil {
 		panic(err)
 	}

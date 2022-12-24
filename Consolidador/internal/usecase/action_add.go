@@ -23,7 +23,7 @@ type ActionAddUserCase struct{
 	ActionTable entity.ActionTableInterface
 }
 
-func (a *ActionAddUserCase) Execute(ctx, context.Context, input ActionAddInput) error {
+func (a *ActionAddUserCase) Execute(ctx context.Context, input ActionAddInput) error {
 	return a.Uow.Do(ctx, func (uow *uow.Uow) error{
 		matchRepo := a.getMatchRepository(ctx)
 		myTeamRepo := a.getMyTeamRepository(ctx)
