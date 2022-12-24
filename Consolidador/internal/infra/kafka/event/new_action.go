@@ -20,7 +20,7 @@ func (p ProcessNewAction) Process (ctx context.Context, msg *kafka.Message, uow 
 	}
 	actionTable := entity.ActionTable{}
 	actionTable.Init()
-	addNewActionUseCase := usecase.NewActionUseCase(uow, &actionTable)
+	addNewActionUseCase := usecase.NewActionAddUseCase(uow, &actionTable)
 	err = addNewActionUseCase.Execute(ctx, input)
 	if err != nil{
 		return err
