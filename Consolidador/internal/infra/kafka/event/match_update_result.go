@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/usecase"
 	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/package/uow"
 )
