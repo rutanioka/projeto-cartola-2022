@@ -15,7 +15,7 @@ func NewTeam (id, name string) *Team {
 }
 
 func (t *Team) AddPlayer(player *Player) {
-    t.Players = append(t.Players, player)   
+    t.Players = append(t.Players, t.Players...)   
 }
 
 func (t *Team) RemovePlayer(player *Player) {

@@ -2,28 +2,36 @@ package usecase
 
 import (
 	"context"
+	"errors"
 
 	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/domain/entity"
 	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/domain/entity/repository"
 	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/package/uow"
 )
 
-
+var errActionNotFound = errors.New("action not found")
 
 type ActionAddInput struct{
-	MatchID string
-	TeamID string
-	PlayerID string
-	Minute int
-	Action string
+	MatchID  string `json:"match_id"`
+	TeamID   string `json:"team_id"`
+	PlayerID string `json:"player_id"`
+	Minute   int    `json:"minutes"`
+	Action   string `json:"action"`
 }
 
-type ActionAddUserCase struct{
+type ActionAddUseCase struct{
 	Uow uow.UowInterface
 	ActionTable entity.ActionTableInterface
 }
 
-func (a *ActionAddUserCase) Execute(ctx, context.Context, input ActionAddInput) error {
+func NewActionAddUseCase(uow uow.UowInterface, actionTable entity.ActionTableInterface) *ActionAddUseCase{
+	return &ActionAddUseCase{
+		Uow: uow,
+		ActionTable: actionTable,
+	}
+}  
+
+func (a *ActionAddUseCase) Execute(ctx context.Context, input ActionAddInput) error {
 	return a.Uow.Do(ctx, func (uow *uow.Uow) error{
 		matchRepo := a.getMatchRepository(ctx)
 		myTeamRepo := a.getMyTeamRepository(ctx)
@@ -34,15 +42,15 @@ func (a *ActionAddUserCase) Execute(ctx, context.Context, input ActionAddInput) 
 			return err
 		}
 		
-		score, err :+ a.ActionTable.GetScore(input,input.Action)
-		if err !- nil{
-			return err
+		score, err := a.ActionTable.GetScore(input.Action)
+		if err != nil{
+			return errActionNotFound
 		}
 
 		theAction := entity.NewGameAction(input.PlayerID, input.Minute, input.Action, score)
 		match.Actions = append(match.Actions, *theAction)
 
-		err = matchRepo.SaveActions(ctx, float64(score))
+		err = matchRepo.SaveActions(ctx, match,float64(score))
 		if err != nil{
 			return err
 		}
@@ -52,17 +60,17 @@ func (a *ActionAddUserCase) Execute(ctx, context.Context, input ActionAddInput) 
 			return err
 		}
 
-		player.Price += float(score)
+		player.Price += float64(score)
 		err = playerRepo.Update(ctx,player)
 		if err != nil{
 			return err
 		}		
 
-		myTeam, err := myTeamRepo.FindByID(ctx,input.TeamID)
+		myTeam, err := myTeamRepo.FindByID(ctx,"22087246-01bc-46ad-a9d9-a99a6d734167")
 		if err != nil{
 			return err
 		}
-		err = myTeamRepo.AddScore(ctx, float64(score))
+		err = myTeamRepo.AddScore(ctx, myTeam, float64(score))
 		if err != nil{
 			return err
 		}

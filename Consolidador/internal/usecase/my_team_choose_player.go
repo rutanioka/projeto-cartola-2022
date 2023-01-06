@@ -3,8 +3,8 @@ package usecase
 import (
 	"context"
 
-	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/domain/service"
 	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/domain/entity/repository"
+	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/domain/service"
 	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/package/uow"
 )
 

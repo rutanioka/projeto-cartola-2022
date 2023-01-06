@@ -3,10 +3,17 @@ package main
 import (
 	"context"
 	"database/sql"
+	"net/http"
 
-	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/domain/entity/repository"
-	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/package/uow"
+	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
+	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/infra/repository"
 	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/infra/db"
+	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/infra/kafka/consumer"
+	"github.com/rutanioka/Projeto-Cartola-2022/Consolidador/package/uow"
+	httphandler "github.com/rutanioka/Projeto-Cartola-2022/Consolidador/internal/infra/http"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main()  {
@@ -21,6 +28,30 @@ func main()  {
 		panic(err)
 	}
 	registerRepositories(uow)
+
+	r:= chi.NewRouter()
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"https://*","http://*"},
+		AllowedMethods: []string{"GET","POST","PUT","DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders: []string{"Link"},
+		AllowCredentials: false,
+		MaxAge: 300,
+
+	}))
+	r.Get("/players", httphandler.ListPlayerHandler(ctx, *db.New(dtb)))
+	r.Get("/my-teams/{teamID}/players", httphandler.ListTeamPlayerHandler(ctx, *db.New(dtb)))
+	r.Get("/my-teams/{teamID}/balance", httphandler.GetMyTeamBalanceHandler(ctx, *db.New(dtb)))
+	r.Get("/matches", httphandler.ListMatchHandler(ctx, repository.NewMatchRepository(dtb)))
+	r.Get("/matches/{matchID}", httphandler.ListMatchByIDHandler(ctx, repository.NewMatchRepository(dtb)))
+
+	go http.ListenAndServe(":8080", r)
+
+	var topics = []string{"newMatch", "chooseTeam", "newPlayer", "matchUpdateResult", "newAction"}
+	msgChan := make(chan *kafka.Message)
+	go consumer.Consume(topics, "host.docker.internal:9094", msgChan)
+	consumer.ProcessEvents(ctx, msgChan, uow)
+
 
 }
 
